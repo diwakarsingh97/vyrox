@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#090812">
+<title>VYRO — Your Life. In Sync.</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+:root{--bg:#090812;--panel:#12101e;--panel2:#191528;--line:#29243b;--text:#f7f4ff;--muted:#a39bb9;--purple:#a98aff;--purple2:#7c4dff;--mint:#9ff0d0;--pink:#f1a7dc;--blue:#94c9ff;--radius:22px;--shadow:0 20px 60px #0005}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(ellipse at 20% -10%,#261743 0,transparent 35%),radial-gradient(ellipse at 100% 30%,#16112b 0,transparent 30%),var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--purple);outline-offset:3px}
+.hidden{display:none!important}
+.app{max-width:1200px;margin:auto;padding:24px 22px 110px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:30px}
+.brand{display:flex;align-items:center;gap:11px}
+.logo{width:42px;height:42px;border-radius:15px;background:linear-gradient(145deg,#d5c2ff,#8a58ff 60%,#5e35be);display:grid;place-items:center;color:#160c2c;font-family:'Space Grotesk';font-size:21px;font-weight:700;box-shadow:0 6px 28px #8a58ff50}
+.brandname{font:700 20px 'Space Grotesk';letter-spacing:.18em}
+.tagline{font-size:11px;color:var(--muted);margin-top:2px}
+.top-actions{display:flex;align-items:center;gap:10px}
+.iconbtn,.ghostbtn{border:1px solid var(--line);background:#151222;color:var(--text);border-radius:14px;padding:10px 13px}
+.avatar{width:44px;height:44px;flex:0 0 44px;border-radius:50%;display:grid;place-items:center;overflow:hidden;background:linear-gradient(135deg,#3d285f,#a98aff);border:2px solid #c7afff;color:#fff;font-weight:700;box-shadow:0 0 0 4px #a98aff18,0 7px 24px #8a58ff35;cursor:pointer;padding:0}
+.avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.profile-photo-wrap{display:flex;align-items:center;gap:16px;padding:16px;border:1px solid #3a2c50;border-radius:18px;background:linear-gradient(120deg,#211831,#12101d);margin-bottom:17px}
+.profile-photo{width:86px;height:86px;border-radius:25px;overflow:hidden;flex:0 0 86px;display:grid;place-items:center;background:linear-gradient(145deg,#6d48a7,#211831);border:1px solid #8565ba;color:#f1e8ff;font:700 28px 'Space Grotesk';box-shadow:0 10px 30px #0003}
+.profile-photo img{width:100%;height:100%;object-fit:cover}
+.profile-photo-copy{min-width:0}
+.profile-photo-copy .btnrow{margin-top:10px}
+.dash-member{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(230px,.85fr);gap:18px;align-items:center;margin-bottom:17px;padding:18px;border-radius:25px;border:1px solid #51416e;background:linear-gradient(115deg,#1d1530,#100e1b 60%,#19132a);box-shadow:0 18px 55px #0003;position:relative;overflow:hidden}
+.dash-member:before{content:'';position:absolute;width:280px;height:280px;right:20%;top:-190px;border-radius:50%;background:#a98aff20;filter:blur(5px);pointer-events:none}
+.dash-member-copy{position:relative;z-index:1}
+.dash-member .tier-card{min-height:195px;padding:17px;box-shadow:0 16px 38px #0004}
+.dash-member .card-number{font-size:17px}
+.dash-member .debit-chip{width:33px;height:25px;margin-top:14px}
+.dash-member .member-price{font:600 22px 'Space Grotesk';color:#eee3ff}
+.profile-badge{font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:#d7c5ff}
+.eyebrow{color:var(--purple);text-transform:uppercase;font-size:11px;letter-spacing:.16em;font-weight:700}
+.hello{font:600 clamp(27px,4vw,42px) 'Space Grotesk';letter-spacing:-.04em;margin:8px 0}
+.sub{color:var(--muted);line-height:1.6;font-size:14px}
+.layout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:26px}
+.sidebar{align-self:start;position:sticky;top:20px;padding:12px;border:1px solid var(--line);border-radius:24px;background:#100e1ad9;backdrop-filter:blur(20px)}
+.navbtn{display:flex;align-items:center;gap:12px;width:100%;border:0;background:transparent;color:var(--muted);padding:13px 14px;border-radius:14px;text-align:left;margin:2px 0;transition:.2s}
+.navbtn .ico{width:22px;text-align:center;font-size:17px}
+.navbtn:hover,.navbtn.active{color:#fff;background:linear-gradient(100deg,#4d337a80,#291d44)}
+.navbtn.active{box-shadow:inset 2px 0 var(--purple)}
+.side-label{padding:15px 14px 6px;color:#746b8c;font-size:10px;text-transform:uppercase;letter-spacing:.16em}
+.content{min-width:0}
+.page{animation:fadeup .35s ease both}
+@keyframes fadeup{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.grid{display:grid;gap:16px}
+.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.card{background:linear-gradient(145deg,#171426ed,#100e1af2);border:1px solid var(--line);border-radius:var(--radius);padding:20px;min-width:0;box-shadow:0 8px 35px #00012;transition:border-color .25s,transform .25s,box-shadow .25s}
+.card:hover{border-color:#51406f;box-shadow:0 15px 42px #0002,0 0 0 1px #a98aff0b}
+.hero-card{border-color:#4d3a6c;box-shadow:0 18px 55px #0003,inset 0 1px #ffffff08;position:relative;overflow:hidden;background:linear-gradient(125deg,#24193d,#171127 55%,#11101c);min-height:220px}
+.brandname{background:linear-gradient(90deg,#fff 0%,#c7aaff 52%,#8e70ff 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.logo{position:relative;isolation:isolate}
+.logo:after{content:'';position:absolute;inset:-4px;border:1px solid #b99bff45;border-radius:18px;z-index:-1;animation:logoPulse 4s ease-in-out infinite}
+@keyframes logoPulse{0%,100%{transform:scale(1);opacity:.4}50%{transform:scale(1.09);opacity:.9}}
+.tier-card{transition:transform .25s,box-shadow .25s}
+.tier-card:hover{transform:translateY(-3px);box-shadow:0 22px 55px #0005}
+.dash-member{isolation:isolate}
+.dash-member:after{content:'';position:absolute;inset:0;background:linear-gradient(110deg,transparent 10%,#ffffff04 50%,transparent 80%);pointer-events:none;z-index:-1}
+.cardhead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+.cardtitle{font:600 16px 'Space Grotesk'}
+.small{font-size:12px;color:var(--muted)}
+.pill{display:inline-flex;align-items:center;gap:6px;border:1px solid #3b3154;background:#211a31;color:#d6c7ff;padding:6px 9px;border-radius:100px;font-size:11px;white-space:nowrap}
+.hero-card:after{content:"";position:absolute;width:240px;height:240px;border-radius:50%;right:-65px;top:-75px;background:radial-gradient(circle,#a98aff42,transparent 68%);pointer-events:none}
+.hero-content{position:relative;z-index:1}
+.hero-number{font:600 clamp(38px,6vw,54px) 'Space Grotesk';letter-spacing:-.06em;margin:13px 0 4px}
+.hero-number span{font-size:16px;color:var(--muted);letter-spacing:0}
+.hero-foot{display:flex;align-items:center;gap:9px;margin-top:23px;color:#d8caff;font-size:12px}
+.orb{width:9px;height:9px;border-radius:50%;background:var(--mint);box-shadow:0 0 14px var(--mint)}
+.ringwrap{display:flex;align-items:center;gap:20px}
+.ring{width:118px;height:118px;flex-shrink:0;position:relative;display:grid;place-items:center}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:8}
+.ring .track{stroke:#302840}
+.ring .progress{stroke:var(--purple);stroke-linecap:round;stroke-dasharray:283;stroke-dashoffset:283;transition:stroke-dashoffset .7s ease}
+.ringval{position:absolute;text-align:center}
+.ringval strong{display:block;font:600 25px 'Space Grotesk'}
+.ringval span{font-size:10px;color:var(--muted)}
+.statrow{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid #29243a}
+.statrow:last-child{border:0}
+.statrow strong{font-weight:600}
+.progressbar{height:6px;border-radius:10px;background:#302940;overflow:hidden;margin-top:9px}
+.progressbar span{display:block;height:100%;border-radius:10px;background:linear-gradient(90deg,var(--purple2),var(--purple));transition:width .4s}
+.metric{display:flex;gap:12px;align-items:center}
+.metric-icon{width:42px;height:42px;display:grid;place-items:center;border-radius:14px;background:#29203d;font-size:19px}
+.metric-val{font:600 25px 'Space Grotesk';margin:6px 0 2px}
+.metric-label{color:var(--muted);font-size:12px}
+.section-title{font:600 24px 'Space Grotesk';margin:0 0 6px}
+.section-top{display:flex;justify-content:space-between;align-items:flex-end;gap:15px;margin-bottom:22px}
+.section-top p{margin:0}
+.btn{border:0;border-radius:14px;padding:12px 16px;color:#1a1030;background:linear-gradient(135deg,#d6c6ff,#a98aff);font-weight:700;box-shadow:0 7px 24px #895cff20;transition:transform .2s,filter .2s}
+.btn:hover{transform:translateY(-1px);filter:brightness(1.07)}
+.btn.secondary{background:#211a31;color:#e6ddff;border:1px solid #3a3050;box-shadow:none}
+.btn.danger{background:#321b2c;color:#ffc6df;border:1px solid #60314e;box-shadow:none}
+.btn.smallbtn{padding:8px 11px;font-size:12px;border-radius:11px}
+.btnrow{display:flex;flex-wrap:wrap;gap:9px}
+.field{display:flex;flex-direction:column;gap:7px;margin-bottom:14px}
+.field label{font-size:12px;color:#c7bedb}
+.field input,.field select,.field textarea,.inline-input{width:100%;border:1px solid #373047;background:#0e0c17;color:var(--text);border-radius:12px;padding:12px 13px;min-width:0}
+.field textarea{min-height:90px;resize:vertical}
+.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 12px}
+.formgrid .full{grid-column:1/-1}
+.list{display:flex;flex-direction:column;gap:10px}
+.listitem{display:flex;align-items:center;gap:12px;padding:12px;background:#151221;border:1px solid #29243a;border-radius:15px}
+.listitem .grow{flex:1;min-width:0}
+.listitem strong{display:block;font-size:13px;font-weight:600}
+.listitem small{color:var(--muted);font-size:11px;display:block}
+.listitem button{border:1px solid #3a304e;background:#211a31;color:#cdbaff;border-radius:10px;padding:7px 9px}
+.empty{padding:24px 12px;text-align:center;border:1px dashed #3b3150;border-radius:15px;color:#9387ac;font-size:13px}
+.quick{display:flex;flex-wrap:wrap;gap:8px}
+.quick button{padding:9px 12px;border-radius:12px;border:1px solid #39304e;background:#211a31;color:#ddd1ff;font-size:12px}
+.day{border:1px solid #332a46;background:#171323;border-radius:14px;text-align:center;padding:11px 4px}
+.day.today{border-color:#a98aff;background:#2c2140}
+.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);opacity:0;pointer-events:none;z-index:1000;background:#e0d1ff;color:#211438;padding:12px 17px;border-radius:12px;font-size:13px;font-weight:700;transition:.25s;max-width:calc(100vw - 28px)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.bottombar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:35px;padding:20px 2px;color:#716987;font-size:11px;border-top:1px solid #ffffff0c}
+.mobile-nav{display:none}
+.onboarding{position:fixed;inset:0;z-index:500;background:radial-gradient(ellipse at 70% 0%,#43246a 0,transparent 40%),#090812;display:grid;place-items:center;padding:20px;overflow:auto}
+.onboard-card{width:min(560px,100%);padding:clamp(23px,5vw,44px);border:1px solid #51406d;border-radius:28px;background:linear-gradient(145deg,#1b1529f7,#100e1afc);box-shadow:0 30px 100px #0007;animation:fadeup .5s ease both}
+.onboard-mark{font-size:10px;letter-spacing:.2em;color:#c9b1ff;font-weight:700;margin-bottom:26px}
+.stepdots{display:flex;gap:7px;margin-bottom:26px}
+.stepdots i{width:25px;height:4px;border-radius:5px;background:#3c304f}
+.stepdots i.on{background:linear-gradient(90deg,#7c4dff,#c5aaff)}
+.onboard-title{font:600 clamp(29px,6vw,43px)/1.1 'Space Grotesk';letter-spacing:-.05em;margin:0 0 12px}
+.onboard-copy{font-size:14px;line-height:1.7;color:#a9a0bd;margin:0 0 25px}
+.onboard-actions{display:flex;justify-content:space-between;gap:10px;margin-top:24px}
+.privacyline{font-size:10px;line-height:1.6;color:#776e8b;margin-top:22px}
+.mobile-nav button{border:0;background:transparent;color:#9389a7;font-size:10px;display:flex;flex-direction:column;align-items:center;gap:5px;padding:10px 7px}
+.mobile-nav button span{font-size:18px}
+.mobile-nav button.active{color:#e0d2ff}
+.notice{border:1px solid #403352;border-radius:14px;background:#1b1527;padding:13px;color:#b5a8ce;font-size:12px;line-height:1.6}
+.notice b{color:#dfd1ff}
+.tabrow{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:15px}
+.tab{border:1px solid #39304e;border-radius:12px;padding:9px 12px;background:#191425;color:#a99cbe;font-size:12px}
+.tab.active{background:#392757;color:#f0e8ff;border-color:#8a68c1}
+.modal-backdrop{position:fixed;inset:0;background:#05040bd9;z-index:800;display:grid;place-items:center;padding:16px;backdrop-filter:blur(9px)}
+.modal{width:min(560px,100%);max-height:90vh;overflow:auto;border:1px solid #493861;background:#151020;border-radius:23px;padding:22px;box-shadow:0 25px 100px #0008}
+.modalhead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}
+.modalhead h2{font:600 22px 'Space Grotesk';margin:0}
+.modalclose{border:1px solid #3b304e;background:#211a31;color:#ddd0ff;border-radius:11px;padding:8px 11px}
+@media(max-width:850px){.layout{grid-template-columns:1fr}.sidebar{display:none}.mobile-nav{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:200;justify-content:space-around;gap:2px;overflow-x:auto;background:#0d0b16f5;border-top:1px solid #ffffff12;backdrop-filter:blur(20px);padding:4px max(4px,env(safe-area-inset-right)) calc(5px + env(safe-area-inset-bottom)) max(4px,env(safe-area-inset-left))}.mobile-nav button{flex:1 0 56px}.grid.three{grid-template-columns:repeat(2,minmax(0,1fr))}.bottombar{flex-wrap:wrap}.bottombar span:nth-child(2){display:none}}
+@media(max-width:520px){.app{padding:14px 12px 105px}.topbar{margin-bottom:22px}.brandname{font-size:18px}.tagline{font-size:9px}.top-actions{gap:6px}.top-actions .ghostbtn{display:none}.grid.two,.grid.three{grid-template-columns:1fr}.card{padding:16px;border-radius:19px}.section-top{align-items:flex-start;flex-direction:column}.section-title{font-size:27px}.hello{font-size:34px}.ringwrap{gap:13px}.ring{width:95px;height:95px}.ringval strong{font-size:22px}.formgrid{grid-template-columns:1fr}.formgrid .full{grid-column:auto}.bottombar{font-size:10px}.onboard-card{border-radius:23px}.profile-photo-wrap{align-items:flex-start}.profile-photo{width:70px;height:70px;flex-basis:70px}}
+/* VYRO signature luxury upgrade */
+:root{--gold:#f3cf83;--bronze:#cd9369;--platinum:#d8deef}
+body{background:radial-gradient(ellipse at 12% -8%,#382052 0,transparent 34%),radial-gradient(ellipse at 90% 15%,#1a1740 0,transparent 32%),var(--bg)}
+.logo{border-radius:14px;background:linear-gradient(145deg,#f3e8ff 0%,#bca0ff 35%,#7c4dff 75%,#4b2d91 100%);box-shadow:0 8px 30px #9c72ff55}
+.card{background:linear-gradient(145deg,#1a1628ee,#100d19f5 72%);border-color:#302640;box-shadow:0 10px 34px #0003,inset 0 1px #ffffff05}
+.card:hover{border-color:#51406d;box-shadow:0 18px 55px #0003,inset 0 1px #ffffff08}
+.hero-card{background:radial-gradient(circle at 90% 5%,#8e5cff26,transparent 35%),linear-gradient(125deg,#281b43,#171127 58%,#11101c)}
+.btn{background:linear-gradient(135deg,#e3d5ff,#b49aff 48%,#9a74ff);box-shadow:0 7px 25px #895cff35}
+.premium-banner{border:1px solid #59427e;background:radial-gradient(ellipse at 100% 0%,#6d42b333,transparent 40%),linear-gradient(125deg,#251b38,#15101f 70%);border-radius:22px;padding:22px;position:relative;overflow:hidden}
+.premium-banner:after{content:'✦';position:absolute;right:25px;top:15px;font-size:76px;color:#bda1ff17}
+.tier-card{position:relative;overflow:hidden;min-height:230px;border-radius:23px;padding:22px;border:1px solid #ffffff25;box-shadow:0 18px 40px #0004;isolation:isolate}
+.tier-card:after{content:'';position:absolute;width:170px;height:170px;right:-55px;top:-65px;border:1px solid #ffffff25;border-radius:50%;box-shadow:0 0 0 18px #ffffff06,0 0 0 38px #ffffff04;z-index:-1}
+.tier-card.gold{background:linear-gradient(130deg,#4a381d,#201a14 58%,#110f13);border-color:#b68c4a}
+.tier-card.platinum{background:linear-gradient(130deg,#333449,#171824 60%,#111019);border-color:#b8c0df}
+.tier-label{font-size:10px;letter-spacing:.22em;text-transform:uppercase;opacity:.8}
+.debit-chip{width:34px;height:25px;border-radius:7px;border:1px solid #fff7;background:linear-gradient(135deg,#fff5d7,#c7ad75);position:relative;margin:18px 0 15px}
+.debit-chip:after{content:'';position:absolute;left:50%;top:0;bottom:0;border-left:1px solid #5e4a2c66}
+.card-number{font:500 15px 'Space Grotesk';letter-spacing:.16em;color:#f6e9d7}
+.tier-card.gold .card-number{color:#f7e5b9}
+.tier-card.platinum .card-number{color:#e9ecff}
+.award-card{background:linear-gradient(145deg,#211a31,#12101b);border:1px solid #443454;border-radius:19px;padding:18px;min-width:0}
+.award-card.unlocked{border-color:#8a6cc2;box-shadow:0 0 30px #9a71ff10}
+.award-icon{width:52px;height:52px;border-radius:17px;display:grid;place-items:center;font-size:25px;background:#322344;margin-bottom:14px}
+.award-card.locked{opacity:.72;filter:saturate(.65)}
+.award-status{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mint);margin-top:14px}
+.cert-preview{border:1px solid #aa8ce4;background:radial-gradient(circle at 50% 0%,#4c327d,#17111f 65%);border-radius:18px;padding:25px;text-align:center;position:relative;overflow:hidden}
+.cert-preview:before{content:'';position:absolute;inset:8px;border:1px solid #bda6ef66;border-radius:12px;pointer-events:none}
+.cert-seal{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;margin:16px auto;background:linear-gradient(135deg,#e6d5ff,#a98aff);color:#201238;font-size:27px}
+@media(max-width:850px){.mobile-nav{overflow-x:auto;justify-content:flex-start}.mobile-nav button{flex:0 0 63px}}
+@media(max-width:520px){.grid.two,.grid.three{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+/* VYRO VISUAL PASS — editorial luxury, sharper contrast, less template-like */
+:root{--bg:#08090d;--panel:#11131b;--panel2:#171a24;--line:#292b38;--text:#f4f3f8;--muted:#9295a6;--lime:#c8ff4d;--purple:#9c7aff;--purple2:#744cff}
+html{background:var(--bg)}
+body{background:radial-gradient(ellipse at 8% -6%,#4b287744 0,transparent 34%),radial-gradient(ellipse at 92% 4%,#c8ff4d0a 0,transparent 26%),var(--bg);color:var(--text)}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;opacity:.18;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.15'/%3E%3C/svg%3E")}
+.app{max-width:1380px;padding:27px 30px 115px}
+.topbar{margin-bottom:35px;padding:3px 0 20px;border-bottom:1px solid #ffffff0b}
+.logo{border-radius:14px;background:linear-gradient(140deg,#e5ffb0 0%,#b8f75c 40%,#8a54ff 100%);box-shadow:0 7px 28px #b5f94a28;color:#171a0f}
+.logo:after{border-color:#c8ff4d3b;border-radius:17px}
+.brandname{letter-spacing:.22em;font-size:21px;background:linear-gradient(100deg,#fff 0%,#dfffad 45%,#b4a0ff 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.tagline{font-size:10px;letter-spacing:.2em;color:#858797}
+.iconbtn,.ghostbtn{background:#12141c;border-color:#292c38;border-radius:13px;color:#dcdce8}
+.iconbtn:hover,.ghostbtn:hover{border-color:#a7e94e;color:#d6ff9a}
+.avatar{background:linear-gradient(135deg,#a8ef4a,#9060ff);border:2px solid #d6ff9a;box-shadow:0 0 0 4px #c8ff4d0b,0 7px 24px #0004}
+.layout{grid-template-columns:226px minmax(0,1fr);gap:30px}
+.sidebar{padding:11px;border-radius:22px;background:#101119d9;border-color:#ffffff10;box-shadow:0 15px 45px #0002}
+.side-label{color:#777b8b;font-size:9px;letter-spacing:.22em;padding:16px 14px 7px}
+.navbtn{font-size:13px;border-radius:13px;padding:13px 14px;color:#9c9eae}
+.navbtn .ico{font-size:16px;color:#9e86d9}
+.navbtn:hover,.navbtn.active{background:linear-gradient(100deg,#c8ff4d18,#9b7aff0e);color:#f1f2f6}
+.navbtn.active{box-shadow:inset 2px 0 #c8ff4d}
+.navbtn.active .ico{color:#c8ff4d}
+.sidebar .notice{background:#151720;border-color:#282b37;color:#a8aaba}
+.sidebar .notice b{color:#d7ff9c}
+.card{background:linear-gradient(145deg,#151721f2,#101119f5);border-color:#ffffff0d;border-radius:21px;box-shadow:0 15px 45px #0002,inset 0 1px #ffffff04}
+.card:hover{border-color:#a7e94e2b;box-shadow:0 20px 50px #0003,0 0 0 1px #c8ff4d06;transform:translateY(-2px)}
+.cardtitle{font-size:15px;letter-spacing:-.025em;color:#f0eff7}
+.cardhead{margin-bottom:19px}
+.eyebrow{color:#c8ff4d;font-size:9px;letter-spacing:.22em;font-weight:700}
+.hello{font-size:clamp(32px,4vw,49px);line-height:1.05;letter-spacing:-.065em;margin:13px 0 9px}
+.sub{color:#9a9bab;font-size:13px;line-height:1.75}
+.section-title{font-size:clamp(27px,3vw,35px);letter-spacing:-.055em;line-height:1.12}
+.section-top{margin-bottom:25px}
+.pill{background:#c8ff4d0b;border-color:#c8ff4d2b;color:#d7ff9c;letter-spacing:.025em;padding:7px 10px}
+.btn{background:linear-gradient(120deg,#ddff9d,#b9f653);color:#14170d;border-radius:12px;box-shadow:0 8px 26px #b5f94a17}
+.btn:hover{filter:brightness(1.06);box-shadow:0 9px 30px #b5f94a22}
+.btn.secondary{background:#191b25;color:#d8d8e5;border:1px solid #303342}
+.btn.secondary:hover{border-color:#c8ff4d55;color:#e4ffc0}
+.btn.danger{background:#2b1723;color:#ffb8d8;border-color:#5d2a48}
+.field label{color:#bfc0ce;font-size:11px;letter-spacing:.02em}
+.field input,.field select,.field textarea,.inline-input{background:#0b0d13;border-color:#2b2e3a;border-radius:11px;color:#f3f3f8}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:#b5ed62;box-shadow:0 0 0 3px #c8ff4d10}
+.listitem{background:#12141d;border-color:#ffffff0b;border-radius:15px;padding:13px}
+.metric-icon{background:linear-gradient(145deg,#232334,#171923);border:1px solid #ffffff0b}
+.progressbar{background:#292c36;height:5px}
+.progressbar span{background:linear-gradient(90deg,#9c7aff,#c8ff4d)}
+.ring .track{stroke:#2a2d38}
+.ring .progress{stroke:#c8ff4d;filter:drop-shadow(0 0 5px #c8ff4d35)}
+.hero-card{min-height:235px;background:radial-gradient(ellipse at 90% 10%,#9a6cff2a,transparent 35%),linear-gradient(125deg,#191c28,#11131b 68%,#151321);border-color:#ffffff12}
+.hero-card:after{width:300px;height:300px;right:-100px;top:-95px;background:radial-gradient(circle,#c8ff4d13,transparent 68%)}
+.hero-card:before{content:"V";position:absolute;right:17px;bottom:-70px;font:700 260px/1 'Space Grotesk';color:#ffffff04;pointer-events:none}
+.hero-number{font-size:clamp(48px,6vw,64px);letter-spacing:-.08em;margin:19px 0 3px}
+.hero-number span{font-size:14px}
+.hero-foot{color:#d5d4e2;font-size:11px}
+.orb{background:#c8ff4d;box-shadow:0 0 14px #c8ff4d}
+.dash-member{grid-template-columns:minmax(0,1fr) minmax(260px,.88fr);gap:25px;margin-bottom:20px;padding:23px;border-color:#ffffff12;background:radial-gradient(ellipse at 100% 0%,#9c7aff12,transparent 44%),linear-gradient(120deg,#161822,#101119 65%,#171525)}
+.dash-member:before{width:340px;height:340px;right:15%;top:-250px;background:#a98aff1a;filter:blur(15px)}
+.dash-member-copy h2{letter-spacing:-.055em!important}
+.dash-member .member-price{color:#e6ffb5!important}
+.dash-member .small{color:#858797}
+.tier-card{position:relative;overflow:hidden;isolation:isolate;border-radius:20px;min-height:210px;padding:20px;border:1px solid #ffffff2b;box-shadow:0 17px 40px #0005}
+.tier-card:before{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent,#ffffff0b 45%,transparent 70%);pointer-events:none;z-index:-1}
+.tier-card:after{content:"";position:absolute;width:170px;height:170px;border:1px solid #ffffff30;border-radius:50%;right:-65px;top:-55px;box-shadow:0 0 0 18px #ffffff07,0 0 0 38px #ffffff04;z-index:-1}
+.tier-card.bronze{background:linear-gradient(135deg,#6e4b37,#34251f 48%,#17151a);border-color:#c99570}
+.tier-card.gold{background:linear-gradient(135deg,#a98337,#655020 36%,#24201a 83%,#15151a);border-color:#e0c06c}
+.tier-card.platinum{background:linear-gradient(135deg,#b6b8ca,#65677b 31%,#292b3d 66%,#14151d);border-color:#e0e3f5}
+.tier-card .tier-label{font-size:9px;letter-spacing:.19em;color:#ffffffc9}
+.tier-card .debit-chip{border-radius:7px;background:linear-gradient(135deg,#fff4c8,#c4b18b);border-color:#fff9}
+.tier-card .card-number{letter-spacing:.16em;text-shadow:0 1px 5px #0003}
+.dash-member .tier-card{min-height:205px;padding:19px}
+.dash-member .card-number{font-size:14px;letter-spacing:.11em}
+.dash-member .debit-chip{width:37px;height:28px;margin-top:15px}
+.dash-member>div:last-child>.small{font-size:9px;letter-spacing:.13em;text-transform:uppercase}
+.premium-banner{border-radius:24px!important;border:1px solid #c8ff4d25!important;background:radial-gradient(ellipse at 100% 0%,#c8ff4d0b,transparent 40%),linear-gradient(120deg,#181a22,#101119 75%)!important}
+.notice{background:#151720;border-color:#2a2d38;color:#aeb0c0;border-radius:14px}
+.notice b{color:#d7ff9c}
+.empty{border-color:#303341;color:#999bac}
+.tab{background:#151721;border-color:#2b2e3b;color:#a5a6b5}
+.tab.active{background:#c8ff4d12;border-color:#c8ff4d55;color:#e4ffc0}
+.quick button{background:#13151e;border-color:#2a2d39;color:#d7d8e3;border-radius:15px}
+.day{background:#13151e;border-color:#2b2d39}
+.day.today{background:#c8ff4d12;border-color:#c8ff4d65}
+.toast{background:#d9ff9a;color:#15180e;border-radius:13px}
+.bottombar{border-color:#ffffff0c;color:#777b8a}
+.mobile-nav{background:#0d0f16f5!important;border-top:1px solid #ffffff12!important;backdrop-filter:blur(22px)}
+.mobile-nav button{color:#828596!important}
+.mobile-nav button.active{color:#d9ff9a!important}
+.onboarding{background:radial-gradient(ellipse at 78% 0%,#6c3dcf33,transparent 42%),#08090d}
+.onboard-card{background:linear-gradient(145deg,#171923fa,#101119fc);border-color:#ffffff16;border-radius:26px}
+.onboard-mark{color:#d9ff9a}
+.stepdots i.on{background:linear-gradient(90deg,#c8ff4d,#a5ef45)}
+.onboard-title{letter-spacing:-.06em}
+.privacyline{color:#818393}
+.profile-photo-wrap{background:linear-gradient(120deg,#191b25,#11131b);border-color:#ffffff12}
+.profile-photo{background:linear-gradient(145deg,#8e7aff,#20232d);border-color:#c8ff4d66}
+.award-card{background:linear-gradient(145deg,#191b25,#11131b);border-color:#ffffff12}
+.award-card.unlocked{border-color:#c8ff4d4d;box-shadow:0 0 30px #c8ff4d08}
+.award-icon{background:linear-gradient(145deg,#282b36,#191b25);border:1px solid #ffffff0b}
+.award-status{color:#d9ff9a}
+.cert-preview{background:radial-gradient(circle at 50% 0%,#3c315c,#14151d 65%);border-color:#c8ff4d55}
+.cert-preview:before{border-color:#c8ff4d35}
+.cert-seal{background:linear-gradient(135deg,#e1ff9e,#b8f653);color:#171a0f}
+.focus-room{border:1px solid #ffffff12;border-radius:30px;padding:28px;background:radial-gradient(ellipse at 50% 0%,#9c7aff14,transparent 50%),linear-gradient(145deg,#151720,#0e1016);overflow:hidden;position:relative}
+.focus-room h2{font:500 clamp(36px,5vw,55px)/1 'Space Grotesk';letter-spacing:-.07em;margin:12px 0}
+.focus-room-head{display:flex;align-items:center;justify-content:space-between;gap:15px}
+.focus-room-mark{font-size:50px;color:#c8ff4d}
+.focus-console{display:grid;grid-template-columns:minmax(220px,.8fr) minmax(260px,1.2fr);gap:35px;align-items:center;margin-top:25px;padding-top:25px;border-top:1px solid #ffffff0c}
+.timer-ring{width:min(100%,290px);aspect-ratio:1;position:relative;display:grid;place-items:center;margin:auto}
+.timer-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.timer-ring circle{fill:none;stroke-width:4}
+.timer-ring .track{stroke:#282b36}
+.timer-ring .progress{stroke:#c8ff4d;stroke-linecap:round;stroke-dasharray:440;stroke-dashoffset:440;transition:stroke-dashoffset .5s}
+.timer-value{position:absolute;text-align:center}
+.timer-value strong{display:block;font:500 clamp(40px,7vw,62px)/1 'Space Grotesk';letter-spacing:-.07em}
+.timer-value span{font-size:9px;color:#999bab;letter-spacing:.2em;text-transform:uppercase}
+.focus-controls{min-width:0}
+.duration-options{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0 20px}
+.duration-options button{border:1px solid #2b2e39;background:#151720;color:#a9abba;border-radius:10px;padding:9px 12px;font-size:11px}
+.duration-options button.active{border-color:#c8ff4d55;background:#c8ff4d0d;color:#e0ffad}
+.focus-buttons{display:flex;flex-wrap:wrap;gap:9px}
+.focus-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:22px}
+.focus-stat{border:1px solid #ffffff0d;background:#12141c;border-radius:18px;padding:18px;min-width:0}
+.focus-stat>strong{display:block;font:500 29px 'Space Grotesk';letter-spacing:-.06em;margin:9px 0}
+.focus-stat>span{font-size:8px;letter-spacing:.17em;color:#9295a6;text-transform:uppercase}
+.focus-stat p{font-size:10px;line-height:1.6;color:#9295a6;margin:0}
+.focus-stat .intent-stat{font-size:16px;letter-spacing:-.02em;overflow-wrap:anywhere}
+.journal-hero{display:grid;grid-template-columns:1fr .7fr;gap:20px;align-items:center;padding:30px;border:1px solid #ffffff12;border-radius:30px;background:radial-gradient(ellipse at 90% 0%,#c8ff4d10,transparent 42%),linear-gradient(120deg,#191b25,#101119 70%);overflow:hidden;position:relative}
+.journal-hero h2{font:500 clamp(38px,5vw,58px)/.98 'Space Grotesk';letter-spacing:-.075em;margin:14px 0}
+.journal-hero-copy>p{color:#a4a6b4;font-size:13px;line-height:1.8;max-width:420px}
+.journal-quote{font:italic 14px/1.7 Georgia,serif;color:#d7e9b7;margin-top:20px}
+.journal-graphic{display:grid;place-items:center;min-height:230px;position:relative}
+.journal-page-sheet{width:185px;min-height:220px;padding:20px 18px;background:linear-gradient(145deg,#e5ffb1,#b5ed62);color:#191c11;transform:rotate(5deg);box-shadow:0 25px 70px #0005;display:flex;flex-direction:column}
+.journal-page-sheet:before{content:'';position:absolute;inset:8px;border:1px solid #26351b3b}
+.journal-page-sheet>span{font-size:7px;letter-spacing:.17em}
+.journal-page-sheet>i{font-style:normal;font-size:27px;margin-top:20px}
+.journal-page-sheet>strong{font:500 27px/.95 'Space Grotesk';letter-spacing:-.07em;margin-top:8px}
+.journal-page-sheet>small{margin-top:auto;font:italic 12px Georgia,serif}
+.journal-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.95fr);gap:14px;margin-top:14px;align-items:start}
+.journal-compose,.journal-archive{min-width:0}
+.journal-prompts{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.prompt-chip{border:1px solid #ffffff10;background:#ffffff04;color:#b6b5c4;border-radius:30px;padding:7px 10px;font-size:9px;cursor:pointer}
+.prompt-chip:hover{border-color:#caff5244;color:#dfff9c}
+.journal-entry-list{display:flex;flex-direction:column;gap:9px}
+.journal-entry{padding:15px;border:1px solid #ffffff0c;border-radius:16px;background:#0d0e13;overflow:hidden}
+.journal-entry-top,.journal-entry-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.journal-category{font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:#caff52}
+.journal-entry time{font-size:9px;color:#777a8a}
+.journal-entry h3{font:500 17px 'Space Grotesk';letter-spacing:-.04em;margin:12px 0 7px}
+.journal-entry p{font-size:11px;line-height:1.7;color:#a1a2b1;white-space:pre-wrap;overflow-wrap:anywhere;max-height:160px;overflow:auto;margin:0}
+.journal-entry-bottom{margin-top:12px;padding-top:10px;border-top:1px solid #ffffff0a}
+.journal-entry-bottom span{font-size:9px;color:#9e9faf}
+@media(max-width:1100px){.app{padding-left:22px;padding-right:22px}.layout{grid-template-columns:205px minmax(0,1fr);gap:20px}.signature-hero{grid-template-columns:minmax(0,1fr) minmax(220px,.8fr)}.signal-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.dashboard-lower,.lower-second{grid-template-columns:1fr}.member-strip-card{width:210px;flex-basis:210px}}
+@media(max-width:850px){.app{padding:17px 16px 110px}.layout{grid-template-columns:1fr}.sidebar{display:none}.mobile-nav{display:flex;justify-content:flex-start;overflow-x:auto;gap:4px;scrollbar-width:none}.mobile-nav::-webkit-scrollbar{display:none}.mobile-nav button{flex:0 0 63px}.signature-hero{grid-template-columns:1fr minmax(180px,.75fr);min-height:320px}.orbit-panel{min-height:230px}.orbit-stat-top{right:-8px}.dashboard-lower,.lower-second{grid-template-columns:1fr}.focus-console{grid-template-columns:minmax(200px,.8fr) minmax(250px,1.2fr);gap:24px}.journal-layout{grid-template-columns:1fr 1fr}}
+@media(max-width:620px){.app{padding:13px 12px 105px}.topbar{padding-bottom:14px;margin-bottom:22px}.brandname{font-size:18px}.tagline{font-size:8px}.top-actions{gap:6px}.top-actions .ghostbtn{display:none}.dash-welcome{align-items:flex-start;flex-direction:column;gap:14px;margin-bottom:17px}.dash-welcome .hello{font-size:37px}.streak-chip{padding:8px 12px}.signature-hero{grid-template-columns:1fr;padding:23px 21px;border-radius:25px;gap:0}.signature-copy h2{font-size:48px;margin-top:19px}.signature-copy p{font-size:12px}.signature-actions{gap:10px;margin-top:20px}.signature-actions .btn{padding:12px 13px}.hero-meta{margin-top:25px;gap:12px}.orbit-panel{min-height:250px;margin-top:5px}.orbit-a{width:235px}.orbit-b{width:185px}.orbit-core{width:102px;height:102px}.orbit-core span{font-size:45px}.orbit-stat-top{top:4%;right:0}.orbit-stat-bottom{bottom:4%;left:0}.dashboard-section-head{align-items:flex-start;flex-direction:column;margin-top:26px}.dashboard-section-head h2{font-size:22px}.dashboard-section-head>.small{font-size:7px}.signal-grid{gap:8px}.signal-card{padding:14px 12px 12px;border-radius:17px}.signal-icon{width:31px;height:31px;margin-bottom:15px}.signal-card>strong{font-size:25px}.signal-label{font-size:7px}.dashboard-lower{gap:10px;margin-top:10px}.card{padding:17px;border-radius:20px}.week-track{gap:4px}.week-day{padding:9px 1px 5px;border-radius:11px}.week-day strong{font-size:15px}.week-bottom{gap:5px}.week-bottom>div strong{font-size:18px}.week-bottom>div span{font-size:6px}.focus-launch-card{padding:19px;min-height:245px}.member-strip{align-items:flex-start;flex-direction:column}.member-strip-card{align-self:flex-end;margin-top:-15px}.mood-options{gap:4px}.mood-option{font-size:8px;padding:8px 1px}.mood-option span{font-size:17px}.privacy-ribbon{align-items:flex-start;flex-wrap:wrap;padding:14px}.privacy-ribbon button{margin-left:34px}.focus-room{padding:21px 17px;border-radius:24px}.focus-room-head{gap:8px}.focus-room h2{font-size:40px}.focus-room-mark{font-size:38px}.focus-console{grid-template-columns:1fr;gap:16px;margin-top:16px;padding-top:18px}.timer-ring{width:min(75vw,250px)}.focus-controls{width:100%}.duration-options{margin:10px 0 17px}.focus-buttons{display:grid;grid-template-columns:1fr 1fr}.focus-buttons .btn:first-child{grid-column:1/-1}.focus-stats{gap:7px}.focus-stat{padding:13px 10px;border-radius:15px}.focus-stat>strong{font-size:22px}.focus-stat>span{font-size:6px;letter-spacing:.1em}.focus-stat p{font-size:8px;line-height:1.5}.intent-stat{font-size:13px!important}.journal-hero{grid-template-columns:1fr .55fr;gap:5px;padding:22px 17px;border-radius:24px}.journal-hero h2{font-size:41px}.journal-hero-copy>p{font-size:10px}.journal-quote{font-size:11px;margin-top:15px}.journal-graphic{min-height:160px}.journal-page-sheet{width:135px;min-height:165px;padding:15px 13px}.journal-page-sheet>strong{font-size:21px}.journal-page-sheet>i{font-size:20px;margin-top:12px}.journal-layout{grid-template-columns:1fr}.journal-entry p{max-height:140px}.section-top{gap:10px}.section-title{font-size:29px}.bottombar{padding-bottom:8px}}
+@media(prefers-reduced-motion:reduce){.orbit-a,.orbit-b,.logo:after{animation:none!important}}
+</style>
+</head>
+<body>
+<div id="onboarding" class="onboarding hidden">
+  <div class="onboard-card">
+    <div class="onboard-mark">VYRO / YOUR LIFE. IN SYNC.</div>
+    <div class="stepdots"><i class="on"></i><i></i><i></i><i></i></div>
+    <div id="onboardBody"></div>
+    <div class="onboard-actions"><button class="btn secondary" id="obBack">Back</button><button class="btn" id="obNext">Continue →</button></div>
+    <div class="privacyline">Your entries are stored in this browser on this device. VYRO is a personal wellness organizer, not a medical device.</div>
+  </div>
+</div>
+<div class="app hidden" id="app">
+  <header class="topbar">
+    <div class="brand"><div class="logo">V</div><div><div class="brandname">VYRO</div><div class="tagline">YOUR LIFE. IN SYNC.</div></div></div>
+    <div class="top-actions"><button class="ghostbtn" id="exportBtn">↗ Export data</button><button class="iconbtn" id="themeBtn" aria-label="Toggle visual theme">◐</button><button class="avatar" id="avatar" aria-label="Open profile settings" title="Profile settings">V</button></div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="side-label">Your space</div>
+      <button class="navbtn active" data-page="home"><span class="ico">◈</span>Overview</button>
+      <button class="navbtn" data-page="routine"><span class="ico">◷</span>Daily routine</button>
+      <button class="navbtn" data-page="focus"><span class="ico">◌</span>Focus studio</button>
+      <button class="navbtn" data-page="journal"><span class="ico">✎</span>Journal & reflection</button>
+      <button class="navbtn" data-page="health"><span class="ico">♡</span>Health & wellness</button>
+      <button class="navbtn" data-page="fitness"><span class="ico">✳</span>Fitness</button>
+      <button class="navbtn" data-page="nutrition"><span class="ico">◉</span>Nutrition</button>
+      <button class="navbtn" data-page="insights"><span class="ico">⌁</span>Progress & insights</button>
+      <button class="navbtn" data-page="achievements"><span class="ico">♜</span>Achievements</button>
+      <button class="navbtn" data-page="membership"><span class="ico">♢</span>Membership</button>
+      <div class="side-label">Personal</div>
+      <button class="navbtn" data-page="settings"><span class="ico">⚙</span>Profile & settings</button>
+      <div class="notice" style="margin:15px 2px 2px">✦ <b>Your pace, your progress.</b><br>Consistency beats perfection.</div>
+    </aside>
+    <main class="content" id="content"></main>
+  </div>
+  <nav class="mobile-nav" aria-label="Main navigation">
+    <button class="active" data-page="home"><span>◈</span>Home</button><button data-page="routine"><span>◷</span>Routine</button><button data-page="focus"><span>◌</span>Focus</button><button data-page="journal"><span>✎</span>Journal</button><button data-page="health"><span>♡</span>Health</button><button data-page="fitness"><span>✳</span>Fitness</button><button data-page="nutrition"><span>◉</span>Food</button><button data-page="insights"><span>⌁</span>Insights</button><button data-page="achievements"><span>♜</span>Awards</button><button data-page="membership"><span>♢</span>Member</button>
+  </nav>
+  <footer class="bottombar"><span>VYRO · A little better, every day.</span><span>Manual logs unless a connected device is explicitly shown.</span><button class="ghostbtn" id="resetBtn">Reset local data</button></footer>
+</div>
+<div class="toast" id="toast"></div>
+<input type="file" id="importFile" accept="application/json,.json" class="hidden">
+<script>
+(() => {
+'use strict';
+const KEY='vyro_life_v1';
+const defaults=()=>({profile:{name:'',age:'',goal:'Feel healthier and more consistent',units:'Metric',theme:'midnight',onboarded:false},routine:[],water:0,waterGoal:8,sleepHours:0,sleepQuality:'Good',mood:'Good',energy:3,weight:'',steps:0,stepGoal:8000,workouts:[],workoutGoal:3,meals:[],caloriesGoal:2000,proteinGoal:100,notes:'',history:{},achievements:{},membership:{plan:'free',status:'inactive'},focus:{duration:25,remaining:1500,sessions:[],label:'Deep work'},journal:[],createdAt:new Date().toISOString()});
+  let state=load(),page='home',obStep=0,obDraft={},toastTimer,focusInterval=null;
+state.focus=Object.assign({duration:25,remaining:1500,sessions:[],label:'Deep work'},state.focus||{});
+state.journal=Array.isArray(state.journal)?state.journal:[];
+state.routine=Array.isArray(state.routine)?state.routine:[];
+state.workouts=Array.isArray(state.workouts)?state.workouts:[];
+state.meals=Array.isArray(state.meals)?state.meals:[];
+state.focus.running=false;
+
+function load(){try{const s=JSON.parse(localStorage.getItem(KEY)||'null');return s&&typeof s==='object'?Object.assign(defaults(),s,{profile:Object.assign(defaults().profile,s.profile||{})}):defaults()}catch(e){return defaults()}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){notify('Storage is full. Export a backup or remove some data.')}}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function today(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function withinWeek(v){if(!v)return false;const d=new Date(),start=new Date(d);start.setHours(0,0,0,0);start.setDate(d.getDate()-((d.getDay()+6)%7));return new Date(v)>=start&&new Date(v)<=d}
+function notify(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),2600)}
+function dayData(){const k=today();state.history[k] ||= {routine:[],water:0,workouts:[],meals:[],sleepHours:0,mood:'',steps:0};return state.history[k]}
+function header(title,desc,action=''){return `<div class="section-top"><div><div class="eyebrow">YOUR PERSONAL SPACE</div><h1 class="section-title">${title}</h1><p class="sub">${desc}</p></div>${action}</div>`}
+function card(title,body){return `<section class="card"><div class="cardhead"><div class="cardtitle">${title}</div></div>${body}</section>`}
+function empty(s){return `<div class="empty">${s}</div>`}
+function btn(label,action,cls='secondary'){return `<button class="btn ${cls}" data-action="${action}">${label}</button>`}
+function field(label,id,type='text',value='',placeholder=''){return `<div class="field"><label for="${id}">${label}</label><input id="${id}" type="${type}" value="${esc(value)}" placeholder="${placeholder}"></div>`}
+function doneCount(){return state.routine.filter(x=>x.done).length}
+function mealTotals(){return state.meals.reduce((a,m)=>({cal:a+Number(m.calories||0),protein:a+Number(m.protein||0)}),{cal:0,protein:0})}
+function workoutCount(){return state.workouts.filter(w=>w.date===today()).length}
+function focusMinutesThisWeek(){return state.focus.sessions.filter(x=>withinWeek(x.date)).reduce((a,x)=>a+Number(x.minutes||0),0)}
+function activeStreak(){let n=0;for(let i=0;i<365;i++){const d=new Date();d.setDate(d.getDate()-i);const k=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;const h=state.history[k];if(h&&((h.routine||[]).some(Boolean)||h.water||h.workouts?.length||h.meals?.length||h.sleepHours||h.steps||h.mood))n++;else if(i)break}return n}
+function tierName(){return ({free:'Free Member',bronze:'Bronze Member',gold:'Gold Member',platinum:'Platinum Member'})[state.membership.plan]||'Free Member'}
+function memberCardMarkup(compact=false){const p=state.membership.plan||'free',tier=p==='free'?'bronze':p;return `<div class="tier-card ${tier}"><div class="tier-label">VYRO · ${p.toUpperCase()} MEMBER</div><div class="debit-chip"></div><div class="card-number">•••• &nbsp; •••• &nbsp; •••• &nbsp; ${String((state.profile.name||'VYRO').replace(/\s/g,'').toUpperCase()).slice(0,4).padEnd(4,'V')}</div><div style="display:flex;justify-content:space-between;gap:8px;margin-top:17px"><div><div class="small">CARDHOLDER</div><strong>${esc((state.profile.name||'YOUR NAME').toUpperCase())}</strong></div><div style="text-align:right"><div class="small">MEMBER SINCE</div><strong>${new Date(state.createdAt||Date.now()).getFullYear()}</strong></div></div></div>`}
+function list(items,kind){if(!items.length)return empty('Nothing here yet. Add your first entry to get started.');return `<div class="list">${items.map((x,i)=>`<div class="listitem"><div class="metric-icon">${kind==='routine'?'◷':kind==='workout'?'✳':kind==='meal'?'◉':'✎'}</div><div class="grow"><strong>${esc(x.name||x.type||x.title||'Entry')}</strong><small>${esc(x.detail||x.date||x.time||'Saved locally')}</small></div>${x.amount?`<b>${esc(x.amount)}</b>`:''}<button data-delete="${kind}" data-index="${i}" aria-label="Delete">×</button></div>`).join('')}</div>`}
+function home(){const name=state.profile.name||'there',done=doneCount(),total=state.routine.length,pct=total?Math.round(done/total*100):0,water=Math.round(state.water/Math.max(1,state.waterGoal)*100),steps=Math.round(state.steps/Math.max(1,state.stepGoal)*100),sleep=Math.min(100,Math.round(state.sleepHours/8*100)),balance=Math.round((pct+water+Math.min(100,steps)+sleep)/4),week=[];
+for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const k=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`,h=state.history[k];week.push({day:d.getDate(),label:d.toLocaleDateString(undefined,{weekday:'short'}).slice(0,2),today:k===today(),active:!!(h&&((h.routine||[]).some(Boolean)||h.water||h.workouts?.length||h.meals?.length||h.sleepHours||h.steps||h.mood))})}
+return `<div class="page">
+<div class="dash-welcome"><div><div class="eyebrow">${new Date().toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'}).toUpperCase()} · YOUR PERSONAL OS</div><h1 class="hello">Make room for <span class="name-accent">your best.</span></h1><p class="sub">Good days are designed, not rushed. Let’s make today count, ${esc(name)}.</p></div><div class="pill">✦ ${activeStreak()} DAY STREAK</div></div>
+<section class="signature-hero"><div class="signature-copy"><div class="hero-kicker"><span class="lime-spark">✳</span> YOUR DAILY OPERATING SYSTEM</div><h2>Progress looks<br><em>good on you.</em></h2><p>One intentional action at a time. Your routine, recovery and focus — in one considered space.</p><div class="signature-actions"><button class="btn" data-goto="routine">Build today's rhythm ↗</button><button class="text-action" data-goto="insights">View your trajectory →</button></div><div class="hero-meta"><span>PRIVATE BY DESIGN</span><span>LOCAL-FIRST · YOUR DATA</span></div></div><div class="orbit-panel"><div class="orbit orbit-a"></div><div class="orbit orbit-b"></div><div class="orbit-core"><span>V</span><small>VYRO</small></div><div class="orbit-stat orbit-stat-top"><span>DAILY BALANCE</span><strong>${balance}<small>/100</small></strong></div><div class="orbit-stat orbit-stat-bottom"><span>ROUTINE COMPLETE</span><strong>${done}<small> / ${total}</small></strong></div></div></section>
+<div class="dashboard-section-head"><div><span class="eyebrow">THE DAILY BRIEF</span><h2>Signals, not noise.</h2></div><span class="small">MANUAL CHECK-INS · LOCAL TOTALS</span></div>
+<div class="signal-grid">
+<div class="signal-card"><span class="signal-icon lime">◷</span><span class="signal-label">RITUALS</span><strong>${done}<small> / ${total}</small></strong><span class="signal-foot">${pct}% completed <i class="mini-track"><b style="width:${pct}%"></b></i></span></div>
+<div class="signal-card"><span class="signal-icon violet">≈</span><span class="signal-label">HYDRATION</span><strong>${state.water}<small> / ${state.waterGoal}</small></strong><span class="signal-foot">glasses logged <i class="mini-track"><b style="width:${Math.min(100,water)}%"></b></i></span></div>
+<div class="signal-card"><span class="signal-icon lilac">☾</span><span class="signal-label">RECOVERY</span><strong>${Number(state.sleepHours).toFixed(1)}<small> hrs</small></strong><span class="signal-foot">${esc(state.sleepQuality)} sleep <i class="mini-track"><b style="width:${sleep}%"></b></i></span></div>
+<div class="signal-card"><span class="signal-icon lime">↗</span><span class="signal-label">MOVEMENT</span><strong>${Number(state.steps).toLocaleString()}<small> steps</small></strong><span class="signal-foot">of ${Number(state.stepGoal).toLocaleString()} goal <i class="mini-track"><b style="width:${Math.min(100,steps)}%"></b></i></span></div></div>
+<div class="dashboard-lower"><section class="card week-card"><div class="cardhead"><div><div class="eyebrow">CONSISTENCY MAP</div><div class="cardtitle">Your week, in motion</div></div></div><div class="week-track">${week.map(d=>`<div class="week-day ${d.today?'is-today':''} ${d.active?'is-active':''}"><span>${d.label}</span><strong>${d.day}</strong><i>${d.active?'✦':''}</i></div>`).join('')}</div><div class="week-caption"><span>✦ Logged activity</span><span>${activeStreak()} day streak</span></div><div class="week-bottom"><div><span class="small">FOCUS THIS WEEK</span><strong>${focusMinutesThisWeek()} <small>min</small></strong></div><div><span class="small">WORKOUTS THIS WEEK</span><strong>${state.workouts.filter(w=>withinWeek(w.date)).length} <small>sessions</small></strong></div><div><span class="small">MILESTONES</span><strong>${Object.keys(state.achievements||{}).length} <small>earned</small></strong></div></div></section>
+<section class="focus-launch-card"><div class="focus-launch-top"><span class="eyebrow">FOCUS STUDIO</span><span class="focus-status">READY WHEN YOU ARE</span></div><div class="focus-glyph">◉</div><h3>Protect your attention.</h3><p>A quieter space for deep work, study or a reset. Start with 25 intentional minutes.</p><button class="btn" data-goto="focus">Enter Focus Studio ↗</button><div class="focus-launch-bottom"><div><strong>${focusMinutesThisWeek()}</strong><small>MINUTES THIS WEEK</small></div></div></section></div>
+<div class="dashboard-lower lower-second"><section class="card member-strip"><div class="member-strip-copy"><div class="eyebrow">THE VYRO MEMBERS CLUB</div><h3>${tierName()} · Your signature</h3><p class="sub">A membership identity for the person you are becoming.</p><button class="btn secondary" data-goto="membership">View membership</button></div><div class="member-strip-card">${memberCardMarkup(true)}</div></section>
+<section class="card checkin-card"><div class="cardhead"><div><div class="eyebrow">EMOTIONAL WEATHER</div><div class="cardtitle">How are you arriving today?</div></div></div><div class="mood-options">${['Great','Good','Okay','Low','Stressed'].map(m=>`<button class="mood-option ${state.mood===m?'active':''}" data-mood="${m}"><span>${({Great:'☀',Good:'◕',Okay:'◌',Low:'☁',Stressed:'〰'})[m]}</span>${m}</button>`).join('')}</div><p class="small">A check-in, not a diagnosis. Your mood is saved locally.</p></section></div>
+<div class="privacy-ribbon notice">✦ <b>Your space stays yours.</b> VYRO saves entries in this browser. Device integrations and cloud sync are not connected.</div></div>`}
+function routinePage(){return `<div class="page">${header('Daily rhythm','Build a routine that supports the life you want.','<button class="btn" data-modal="routine">＋ Add ritual</button>')}
+<div class="grid two">${card('Today’s rituals',`<p class="sub">Check off the small things that add up.</p>${state.routine.length?`<div class="list">${state.routine.map((x,i)=>`<label class="listitem"><input type="checkbox" data-routine-check="${i}" ${x.done?'checked':''}><div class="grow"><strong style="${x.done?'text-decoration:line-through;opacity:.6':''}">${esc(x.name)}</strong><small>${esc(x.time||'Anytime')}${x.category?' · '+esc(x.category):''}</small></div><button type="button" data-delete="routine" data-index="${i}">×</button></label>`).join('')}</div>`:empty('Add your first ritual to begin.')}<div class="progressbar"><span style="width:${state.routine.length?doneCount()/state.routine.length*100:0}%"></span></div><p class="small">${doneCount()} of ${state.routine.length} complete</p>`)}
+${card('Routine intention',`<p class="sub">Keep the plan realistic. Consistency matters more than a perfect streak.</p><div class="notice">Your current intention: <b>${esc(state.profile.goal)}</b></div><div class="btnrow" style="margin-top:14px"><button class="btn secondary" data-goto="settings">Edit personal goal</button><button class="btn secondary" data-action="routine-reset">Reset today’s checks</button></div>`)}</div>
+<div class="grid two" style="margin-top:16px">${card('Suggested rituals',`<div class="list">${[['Morning','Drink water and open the curtains'],['Mind','Five minutes without your phone'],['Movement','A short walk or stretch'],['Evening','Prepare for tomorrow']].map(x=>`<div class="listitem"><div class="grow"><strong>${x[0]}</strong><small>${x[1]}</small></div><button data-action="suggest-${x[0]}">＋ Add</button></div>`).join('')}</div>`)}
+${card('Progress principle',`<div class="metric"><div class="metric-icon">✳</div><div><strong>Make it repeatable.</strong><p class="sub">Start small enough that you can return to it on an ordinary day.</p></div></div>`)}</div></div>`}
+function focusClockText(s){return `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`}
+function focusPage(){const dur=state.focus.duration*60,rem=state.focus.remaining,pct=dur?Math.max(0,Math.min(100,(dur-rem)/dur*100)):0;return `<div class="page">${header('Focus studio','A calmer space for deep work, study, reading or a reset.')}
+<div class="focus-room"><div class="focus-room-head"><div><div class="eyebrow">YOUR ATTENTION, PROTECTED</div><h2>Enter your own<br><span style="color:var(--lime)">quiet mode.</span></h2><p class="sub">Choose a duration, set an intention, and begin.</p></div><div class="focus-room-mark">◉</div></div>
+<div class="focus-console"><div class="timer-ring"><svg viewBox="0 0 200 200"><circle class="track" cx="100" cy="100" r="70"/><circle class="progress timer-progress" cx="100" cy="100" r="70" style="stroke-dasharray:440;stroke-dashoffset:${440-(440*pct/100)}"/></svg><div class="timer-value"><strong id="focusClock">${focusClockText(rem)}</strong><span class="timer-readout"><small>${state.focus.running?'SESSION IN PROGRESS':'READY WHEN YOU ARE'}</small></span></div></div>
+<div class="focus-controls"><div class="field"><label>SESSION INTENTION</label><input id="focusLabel" maxlength="70" value="${esc(state.focus.label)}" placeholder="Deep work, study, reading…"></div><div class="small">CHOOSE A DURATION</div><div class="duration-options">${[5,15,25,45,60,90].map(n=>`<button class="${state.focus.duration===n?'active':''}" data-focus-minutes="${n}">${n} min</button>`).join('')}</div><div class="focus-buttons"><button class="btn" data-action="focus-toggle">${state.focus.running?'Pause session':'Start focus session →'}</button><button class="btn secondary" data-action="focus-reset">Reset</button><button class="btn secondary" data-action="focus-complete">Log session</button></div><p class="small">Keep this tab open while the timer runs. This is a browser timer, not a background service.</p></div></div>
+<div class="focus-stats"><div class="focus-stat"><span>THIS WEEK</span><strong>${focusMinutesThisWeek()}</strong><p>Minutes of focus logged</p></div><div class="focus-stat"><span>SESSIONS</span><strong>${state.focus.sessions.length}</strong><p>Total saved sessions</p></div><div class="focus-stat"><span>INTENTION</span><strong class="intent-stat">${esc(state.focus.label||'Deep work')}</strong><p>Current session theme</p></div></div></div>
+<div class="grid two" style="margin-top:16px">${card('Recent sessions',list(state.focus.sessions.slice(0,8).map(x=>({name:x.label,detail:`${x.minutes} minutes · ${x.date}`})),'focus'))}${card('A useful reset',`<p class="sub">Before starting, close one distraction, choose one task, and decide what “done” looks like.</p><div class="notice">A completed focus session is a personal log. VYRO does not block apps or track your activity.</div>`)}</div></div>`}
+function journalPage(){return `<div class="page">${header('Journal & reflection','Make a little space to notice what is happening within you.')}
+<section class="journal-hero"><div class="journal-hero-copy"><div class="eyebrow">A PRIVATE PAGE, JUST FOR YOU</div><h2>Pause.<br><span style="color:var(--lime)">Notice.</span><br>Begin again.</h2><p>Capture a thought, reflect on a win, or let the day settle before moving on.</p><div class="journal-quote">“You do not have to have it all figured out to take the next step.”</div></div><div class="journal-graphic"><div class="journal-page-sheet"><span>VYRO · PERSONAL NOTES</span><i>✳</i><strong>A moment<br>for me.</strong><small>one thought at a time</small></div></div></section>
+<div class="journal-layout"><section class="card journal-compose"><div class="cardhead"><div><div class="eyebrow">TODAY'S PAGE</div><div class="cardtitle">What’s on your mind?</div></div></div><div class="field"><label>ENTRY TITLE</label><input id="journalTitle" maxlength="100" placeholder="A small win, a thought, a lesson…"></div><div class="field"><label>REFLECTION</label><textarea id="journalBody" maxlength="10000" rows="7" placeholder="Write freely. This is your space."></textarea></div><div class="field"><label>ENTRY TYPE</label><select id="journalType"><option>Reflection</option><option>Gratitude</option><option>Win</option><option>Learning</option><option>Release</option></select></div><div class="small">TRY A PROMPT</div><div class="journal-prompts">${['Something I’m grateful for…','Today I’m proud that…','One thing I learned…','What I need right now is…'].map(x=>`<button class="prompt-chip" data-journal-prompt="${x}">${x}</button>`).join('')}</div><button class="btn" style="margin-top:17px" data-action="journal-save">Save reflection →</button></section>
+<section class="card journal-archive"><div class="cardhead"><div><div class="eyebrow">YOUR PERSONAL ARCHIVE</div><div class="cardtitle">Pages you’ve kept</div></div><span class="pill">${state.journal.length} entries</span></div><div class="field"><input data-journal-search placeholder="Search your journal…"></div><div class="journal-entry-list">${state.journal.length?state.journal.map((x,i)=>`<article class="journal-entry" data-journal-entry data-search="${esc((x.title+' '+x.body+' '+x.type).toLowerCase())}"><div class="journal-entry-top"><span class="journal-category">${esc(x.type)}</span><time>${esc(x.date)}</time></div><h3>${esc(x.title)}</h3><p>${esc(x.body)}</p><div class="journal-entry-bottom"><span>PRIVATE · SAVED ON THIS DEVICE</span><button class="btn secondary smallbtn" data-delete="journal" data-index="${i}">Delete</button></div></article>`).join(''):empty('Your first page is waiting.')}</div></section></div></div>`}
+function healthPage(){return `<div class="page">${header('Health & wellness','Track personal check-ins and recovery. These are manual logs, not medical measurements.')}
+<div class="grid two">${card('Daily wellness',`<form id="healthForm"><div class="formgrid">${field('Water glasses','water','number',state.water)}${field('Daily water goal','waterGoal','number',state.waterGoal)}${field('Sleep hours','sleepHours','number',state.sleepHours)}<div class="field"><label>Sleep quality</label><select id="sleepQuality">${['Excellent','Good','Fair','Poor'].map(x=>`<option ${state.sleepQuality===x?'selected':''}>${x}</option>`).join('')}</select></div><div class="field"><label>Energy today</label><select id="energy">${[1,2,3,4,5].map(x=>`<option ${state.energy===x?'selected':''}>${x}</option>`).join('')}</select></div><div class="field"><label>Mood</label><select id="healthMood">${['Great','Good','Okay','Low','Stressed'].map(x=>`<option ${state.mood===x?'selected':''}>${x}</option>`).join('')}</select></div></div><button class="btn">Save check-in</button></form>`)}
+${card('Hydration',`<div class="metric"><div class="metric-icon">≈</div><div><div class="metric-val">${state.water} / ${state.waterGoal}</div><div class="metric-label">glasses logged today</div></div></div><div class="progressbar"><span style="width:${Math.min(100,state.water/Math.max(1,state.waterGoal)*100)}%"></span></div><div class="btnrow" style="margin-top:15px"><button class="btn" data-action="water-add">＋ One glass</button><button class="btn secondary" data-action="water-remove">− One glass</button></div>`)}</div>
+<div class="grid two" style="margin-top:16px">${card('Movement & recovery',`<form id="movementForm">${field('Steps (manual entry)','steps','number',state.steps)}${field('Step goal','stepGoal','number',state.stepGoal)}${field('Weight (optional)','weight','number',state.weight)}<button class="btn">Save movement</button></form><p class="small">Step counts and weight are self-reported. VYRO does not read device sensors.</p>`)}
+${card('Wellness note',`<form id="wellnessNoteForm"><div class="field"><label>Anything worth noting?</label><textarea id="wellnessNote" rows="4" placeholder="Energy, stress, rest, or a question for your clinician…">${esc(state.notes)}</textarea></div><button class="btn secondary">Save note</button></form><div class="notice" style="margin-top:15px">VYRO is not a medical device and cannot diagnose, monitor emergencies or replace professional care.</div>`)}</div></div>`}
+function fitnessPage(){return `<div class="page">${header('Fitness & movement','Record workouts, celebrate consistency, and progress at your own pace.','<button class="btn" data-modal="workout">＋ Log workout</button>')}
+<div class="grid three"><div class="card"><div class="metric-icon">✳</div><div class="metric-val">${workoutCount()}</div><div class="metric-label">Workouts today</div></div><div class="card"><div class="metric-icon">↗</div><div class="metric-val">${state.workouts.filter(w=>withinWeek(w.date)).length}</div><div class="metric-label">This week</div></div><div class="card"><div class="metric-icon">◎</div><div class="metric-val">${state.workouts.reduce((a,w)=>a+Number(w.minutes||0),0)}</div><div class="metric-label">Minutes recorded</div></div></div>
+<div class="grid two" style="margin-top:16px">${card('Workout history',list(state.workouts.map(w=>({name:w.type,detail:`${w.minutes} min · ${w.intensity||'Unspecified'} · ${w.date}`})),'workout'))}
+${card('Movement intention',`<form id="workoutGoalForm">${field('Weekly workout goal','workoutGoal','number',state.workoutGoal)}<button class="btn secondary">Save goal</button></form><div class="progressbar"><span style="width:${Math.min(100,state.workouts.filter(w=>withinWeek(w.date)).length/Math.max(1,state.workoutGoal)*100)}%"></span></div><p class="small">${state.workouts.filter(w=>withinWeek(w.date)).length} of ${state.workoutGoal} sessions this week.</p><div class="btnrow">${['Walk','Strength','Yoga','Cardio'].map(x=>`<button class="btn secondary smallbtn" data-prefill-workout="${x}">＋ ${x}</button>`).join('')}</div>`)}</div></div>`}
+function nutritionPage(){const t=mealTotals();return `<div class="page">${header('Nutrition','Keep a simple record of meals and approximate nutrition.','<button class="btn" data-modal="meal">＋ Log meal</button>')}
+<div class="grid two"><section class="card"><div class="eyebrow">DAILY ENERGY</div><div class="metric-val">${t.cal.toLocaleString()} <span class="small">kcal</span></div><div class="progressbar"><span style="width:${Math.min(100,t.cal/Math.max(1,state.caloriesGoal)*100)}%"></span></div><p class="small">${state.caloriesGoal} kcal personal target</p><div class="eyebrow" style="margin-top:20px">PROTEIN</div><div class="metric-val">${t.protein} <span class="small">g</span></div><div class="progressbar"><span style="width:${Math.min(100,t.protein/Math.max(1,state.proteinGoal)*100)}%"></span></div><p class="small">${state.proteinGoal} g personal target</p></section>
+${card('Personal targets',`<form id="nutritionGoalForm">${field('Calories target','caloriesGoal','number',state.caloriesGoal)}${field('Protein target (g)','proteinGoal','number',state.proteinGoal)}<button class="btn secondary">Save targets</button></form><p class="small">Targets are customizable planning aids, not medical or dietary prescriptions.</p>`)}</div>
+<div class="grid two" style="margin-top:16px">${card('Food log',list(state.meals.map(m=>({name:m.name,detail:`${m.calories} kcal · ${m.protein} g protein · ${m.date}`})),'meal'))}${card('A balanced approach',`<p class="sub">A meal log is an estimate. Portion sizes and nutrition labels vary, so use entries as a guide rather than a precise measurement.</p><div class="notice">Choose sustainable habits and consult a qualified professional for personalized nutrition advice.</div>`)}</div></div>`}
+function insightsPage(){const t=mealTotals(),routine=state.routine.length?Math.round(doneCount()/state.routine.length*100):0;return `<div class="page">${header('Progress & insights','Notice patterns in the data you choose to record.')}
+<div class="grid three"><div class="card"><div class="eyebrow">ROUTINE</div><div class="metric-val">${routine}%</div><div class="metric-label">Today's completion</div><div class="progressbar"><span style="width:${routine}%"></span></div></div><div class="card"><div class="eyebrow">FOCUS</div><div class="metric-val">${focusMinutesThisWeek()}</div><div class="metric-label">Minutes this week</div></div><div class="card"><div class="eyebrow">MOVEMENT</div><div class="metric-val">${state.workouts.filter(w=>withinWeek(w.date)).length}</div><div class="metric-label">Workouts this week</div></div></div>
+<div class="grid two" style="margin-top:16px">${card('Your current snapshot',`<div class="statrow"><span class="small">Current streak</span><strong>${activeStreak()} days</strong></div><div class="statrow"><span class="small">Water today</span><strong>${state.water}/${state.waterGoal} glasses</strong></div><div class="statrow"><span class="small">Sleep logged</span><strong>${state.sleepHours} hours</strong></div><div class="statrow"><span class="small">Steps logged</span><strong>${Number(state.steps).toLocaleString()}</strong></div><div class="statrow"><span class="small">Meals recorded</span><strong>${state.meals.length}</strong></div><div class="statrow"><span class="small">Calories estimated</span><strong>${t.cal}</strong></div>`)}
+${card('Reflect on the pattern',`<p class="sub">Your records show only what you entered. A quiet day without logs does not mean you made no progress.</p><div class="field"><label>Weekly reflection</label><textarea id="weeklyReflection" rows="4" placeholder="What felt good? What would you change?">${esc(state.weeklyReflection||'')}</textarea></div><button class="btn" data-action="save-reflection">Save reflection</button>`)}</div>
+<div class="notice" style="margin-top:16px">Insights are calculated from your manual logs. VYRO does not infer diagnoses or import wearable data.</div></div>`}
+function achievementsPage(){const achievements=[['first-routine','First steps','Create your first routine ritual','◷',state.routine.length>=1],['five-rituals','Ritual builder','Complete five rituals in one day','✳',doneCount()>=5],['first-focus','First focus','Complete your first focus session','◉',state.focus.sessions.length>=1],['focus-five','Focus practice','Log five focus sessions','◎',state.focus.sessions.length>=5],['first-workout','Move with intent','Log your first workout','↗',state.workouts.length>=1],['journal-one','Words to keep','Write your first journal entry','✎',state.journal.length>=1],['hydration','Hydration habit','Meet your water goal','≈',state.water>=state.waterGoal],['sleep','Recovery matters','Log at least eight hours of sleep','☾',state.sleepHours>=8]];achievements.forEach(a=>{if(a[4])state.achievements[a[0]]=true});save();return `<div class="page">${header('Achievements','Celebrate meaningful progress, not perfection.')}<div class="grid two">${achievements.map(a=>`<section class="award-card ${a[4]?'unlocked':'locked'}"><div class="award-icon">${a[3]}</div><h3>${a[1]}</h3><p class="sub">${a[2]}</p><div class="award-status">${a[4]?'✦ ACHIEVED':'○ NOT YET UNLOCKED'}</div>${a[4]?`<button class="btn secondary smallbtn" data-certificate="${a[0]}" style="margin-top:13px">View certificate</button>`:''}</section>`).join('')}</div><div class="notice" style="margin-top:16px">Milestones are generated from your local entries. They are personal celebrations, not verified credentials.</div></div>`}
+function membershipPage(){const p=state.membership.plan||'free';return `<div class="page">${header('Membership','Choose the membership identity that fits you. Purchases are not connected in this HTML prototype.')}
+<div class="premium-banner"><div class="eyebrow">THE VYRO MEMBERS CLUB</div><h2 style="font:600 34px 'Space Grotesk';letter-spacing:-.06em;margin:12px 0">A little more <span style="color:var(--lime)">you.</span></h2><p class="sub">Membership previews change your local card only. No payment will be charged.</p>${memberCardMarkup()}</div>
+<div class="grid two" style="margin-top:16px">
+${['bronze','gold','platinum'].map((x,i)=>`<section class="card"><div class="tier-card ${x}"><div class="tier-label">VYRO MEMBERS CLUB</div><div class="debit-chip"></div><div class="card-number">•••• · •••• · •••• · ${['0049','0099','0079'][i]}</div><h3 style="margin:18px 0 5px;text-transform:capitalize">${x}</h3><div class="small">${['A considered start','More room to grow','Your complete signature'][i]}</div></div><div style="padding-top:16px"><h3 style="text-transform:capitalize">${x} membership</h3><p class="sub">${['A simple personal routine space.','A premium visual identity and expanded personal experience.','A premium visual identity with unlimited question prompts in the concept.'][i]}</p><div class="metric-val">${['₹49','₹99','₹79'][i]} <span class="small">/ month concept</span></div><p class="small">${i===0?'7 AI-style prompts/day conceptually':i===1?'Premium visual theme conceptually':'Unlimited AI-style prompts conceptually'}</p><button class="btn ${p===x?'':'secondary'}" data-plan-select="${x}">${p===x?'Currently selected':'Preview '+x}</button></div></section>`).join('')}
+</div><section class="card" style="margin-top:16px"><div class="eyebrow">TRANSPARENCY</div><h3>What this means today</h3><p class="sub">The membership cards and prices are UI previews only. No real subscription, billing, AI service, advertising network, or payment entitlement is connected. Do not treat a preview selection as a purchase.</p><button class="btn secondary" data-plan-select="free">Return to free membership</button></section></div>`}
+function settingsPage(){return `<div class="page">${header('Profile & settings','Make VYRO feel like your own space.')}
+<section class="card"><div class="eyebrow">YOUR IDENTITY</div><div class="profile-photo-wrap"><div class="profile-photo">${state.profile.photo?`<img src="${state.profile.photo}" alt="Profile photo">`:esc((state.profile.name||'V').slice(0,1).toUpperCase())}</div><div class="profile-photo-copy"><strong>${esc(state.profile.name||'Your profile')}</strong><p class="sub">Personalize your profile photo. It stays in this browser.</p><div class="btnrow"><button class="btn secondary smallbtn" data-action="photo-upload">Upload photo</button><button class="btn secondary smallbtn" data-action="photo-remove">Remove photo</button></div><input class="hidden" id="profilePhotoInput" type="file" accept="image/*"></div></div>
+<form id="profileForm"><div class="formgrid">${field('Name','profileName','text',state.profile.name)}${field('Age (optional)','profileAge','number',state.profile.age)}<div class="field"><label>Main intention</label><select id="profileGoal">${['Feel healthier and more consistent','Build strength and fitness','Improve sleep and recovery','Create a calmer daily routine','Improve focus and productivity','Build balanced habits'].map(x=>`<option ${state.profile.goal===x?'selected':''}>${x}</option>`).join('')}</select></div><div class="field"><label>Measurement units</label><select id="profileUnits"><option ${state.profile.units==='Metric'?'selected':''}>Metric</option><option ${state.profile.units==='Imperial'?'selected':''}>Imperial</option></select></div></div><button class="btn">Save profile</button></form></section>
+<div class="grid two" style="margin-top:16px">${card('Privacy & your data',`<p class="sub">VYRO saves entries to this browser using local storage. Clearing browser data can remove them. Export a backup regularly if you want to keep your records.</p><div class="btnrow"><button class="btn" id="exportBtn2">Export JSON backup</button><button class="btn secondary" id="importBtn2">Import backup</button></div>`)}
+${card('Appearance & reset',`<p class="sub">Switch the local theme or restart your personal space.</p><div class="btnrow"><button class="btn secondary" data-action="theme">Toggle visual theme</button><button class="btn danger" id="resetBtn2">Reset all local data</button></div><div class="notice" style="margin-top:15px">Reset deletes local VYRO data from this browser. Export a backup first if needed.</div>`)}</div></div>`}
+function render(){save();const pages={home,routine:routinePage,focus:focusPage,journal:journalPage,health:healthPage,fitness:fitnessPage,nutrition:nutritionPage,insights:insightsPage,achievements:achievementsPage,membership:membershipPage,settings:settingsPage};document.getElementById('content').innerHTML=(pages[page]||home)();document.querySelectorAll('[data-page]').forEach(x=>x.classList.toggle('active',x.dataset.page===page));document.getElementById('avatar').innerHTML=state.profile.photo?`<img src="${state.profile.photo}" alt="">`:esc((state.profile.name||'V').slice(0,1).toUpperCase());document.body.classList.toggle('light-theme',state.profile.theme==='light');}
+function go(p){page=p;render();window.scrollTo({top:0,behavior:'smooth'});document.querySelectorAll('.mobile-nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===p))}
+function openModal(kind,prefill=''){let title='',body='';if(kind==='routine'){title='Add a daily ritual';body=`<form id="modalForm">${field('Ritual name','itemName','text','','e.g. Morning walk')}${field('Time (optional)','itemTime','text','','e.g. 7:00 AM')}<div class="field"><label>Category</label><select id="itemCategory"><option>Morning</option><option>Wellness</option><option>Movement</option><option>Focus</option><option>Evening</option><option>Other</option></select></div><button class="btn">Save ritual</button></form>`}else if(kind==='workout'){title='Log a workout';body=`<form id="modalForm"><div class="field"><label>Workout type</label><select id="workoutType">${['Walk','Strength','Yoga','Cardio','Cycling','Sports','Stretching','Other'].map(x=>`<option ${prefill===x?'selected':''}>${x}</option>`).join('')}</select></div>${field('Duration (minutes)','workoutMinutes','number','30')}${field('Intensity (optional)','workoutIntensity','text','','e.g. Easy, moderate, hard')}<button class="btn">Save workout</button></form>`}else if(kind==='meal'){title='Log a meal';body=`<form id="modalForm">${field('Meal or food','mealName','text','','e.g. Lunch')}${field('Calories (estimate)','mealCalories','number','0')}${field('Protein (grams)','mealProtein','number','0')}<button class="btn">Save meal</button></form>`}else return;const wrap=document.createElement('div');wrap.className='modal-backdrop';wrap.id='modal';wrap.innerHTML=`<div class="modal"><div class="modalhead"><h2>${title}</h2><button class="modalclose" id="modalClose">Close ×</button></div>${body}</div>`;document.body.appendChild(wrap);wrap.addEventListener('click',e=>{if(e.target===wrap||e.target.id==='modalClose')wrap.remove()});wrap.querySelector('form').addEventListener('submit',e=>{e.preventDefault();if(kind==='routine'){const name=document.getElementById('itemName').value.trim();if(!name)return notify('Give your ritual a name.');state.routine.push({name,time:document.getElementById('itemTime').value,category:document.getElementById('itemCategory').value,done:false})}if(kind==='workout'){state.workouts.unshift({type:document.getElementById('workoutType').value,minutes:Math.max(0,Number(document.getElementById('workoutMinutes').value)||0),intensity:document.getElementById('workoutIntensity').value,date:today()});snapshotHistory()}if(kind==='meal'){const name=document.getElementById('mealName').value.trim();if(!name)return notify('Add a food or meal name.');state.meals.unshift({name,calories:Math.max(0,Number(document.getElementById('mealCalories').value)||0),protein:Math.max(0,Number(document.getElementById('mealProtein').value)||0),date:today()});snapshotHistory()}wrap.remove();render();notify('Entry saved.')})}
+function snapshotHistory(){const h=dayData();h.routine=state.routine.map(x=>!!x.done);h.water=state.water;h.workouts=state.workouts.filter(w=>w.date===today());h.meals=state.meals.filter(m=>m.date===today());h.sleepHours=state.sleepHours;h.steps=state.steps;h.mood=state.mood;save()}
+function deleteItem(kind,i){const map={routine:state.routine,workout:state.workouts,meal:state.meals,journal:state.journal,focus:state.focus.sessions};const a=map[kind];if(!a||!a[i])return;if(!confirm('Delete this entry?'))return;a.splice(i,1);snapshotHistory();render();notify('Entry deleted.')}
+function action(a){if(a==='theme'){state.profile.theme=state.profile.theme==='light'?'midnight':'light';save();render();return}if(a==='water-add'){state.water++;snapshotHistory();render();return}if(a==='water-remove'){state.water=Math.max(0,state.water-1);snapshotHistory();render();return}if(a==='routine-reset'){if(confirm('Uncheck all rituals for today?')){state.routine.forEach(x=>x.done=false);snapshotHistory();render()}return}if(a.startsWith('suggest-')){const n=a.slice(8),names={Morning:'Morning reset',Mind:'Mindful pause',Movement:'Stretch or walk',Evening:'Prepare for tomorrow'};state.routine.push({name:names[n]||n,time:'Anytime',category:n,done:false});render();notify('Ritual added.');return}if(a==='focus-toggle'){state.focus.label=document.getElementById('focusLabel')?.value||state.focus.label;if(state.focus.running){state.focus.running=false;clearInterval(focusInterval);focusInterval=null}else{if(state.focus.remaining<=0)state.focus.remaining=state.focus.duration*60;state.focus.running=true;clearInterval(focusInterval);focusInterval=setInterval(tickFocus,1000)}save();render();return}if(a==='focus-reset'){state.focus.running=false;clearInterval(focusInterval);focusInterval=null;state.focus.remaining=state.focus.duration*60;render();return}if(a==='focus-complete'){state.focus.running=false;clearInterval(focusInterval);focusInterval=null;state.focus.sessions.unshift({date:today(),minutes:Math.max(1,Math.round((state.focus.duration*60-state.focus.remaining)/60)),label:state.focus.label||'Focus session'});state.focus.remaining=state.focus.duration*60;render();notify('Focus session logged.');return}if(a==='journal-save'){const title=document.getElementById('journalTitle').value.trim()||'Untitled reflection',body=document.getElementById('journalBody').value.trim();if(!body)return notify('Write a few words before saving.');state.journal.unshift({title,body,type:document.getElementById('journalType').value,date:today(),createdAt:new Date().toISOString()});render();notify('Reflection saved privately.');return}if(a==='save-reflection'){state.weeklyReflection=document.getElementById('weeklyReflection').value;save();notify('Reflection saved.');return}if(a==='photo-upload'){document.getElementById('profilePhotoInput').click();return}if(a==='photo-remove'){state.profile.photo='';save();render();return}}
+function tickFocus(){if(!state.focus.running)return;if(state.focus.remaining>0)state.focus.remaining--;if(state.focus.remaining<=0){state.focus.remaining=0;state.focus.running=false;clearInterval(focusInterval);focusInterval=null;state.focus.sessions.unshift({date:today(),minutes:state.focus.duration,label:state.focus.label||'Focus session'});save();render();notify('Focus session complete. Take a breath.');return}const c=document.getElementById('focusClock');if(c)c.textContent=focusClockText(state.focus.remaining);const p=document.querySelector('.timer-progress');if(p)p.style.strokeDashoffset=String(440-440*((state.focus.duration*60-state.focus.remaining)/(state.focus.duration*60)));save()}
+function exportData(){const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='vyro-backup-'+today()+'.json';a.click();URL.revokeObjectURL(url);notify('Backup exported.')}
+function importData(file){const r=new FileReader();r.onload=()=>{try{const s=JSON.parse(r.result);if(!s||typeof s!=='object'||!s.profile)throw Error();if(!confirm('Import this backup and replace current VYRO data?'))return;state=Object.assign(defaults(),s,{profile:Object.assign(defaults().profile,s.profile||{})});save();render();notify('Backup imported.')}catch(e){notify('That is not a valid VYRO backup.')}};r.readAsText(file)}
+function reset(){if(!confirm('Delete all VYRO data saved in this browser? Export a backup first if needed.'))return;localStorage.removeItem(KEY);state=defaults();save();page='home';showOnboarding(true)}
+function showOnboarding(force=false){if(state.profile.onboarded&&!force){document.getElementById('app').classList.remove('hidden');return}document.getElementById('app').classList.add('hidden');document.getElementById('onboarding').classList.remove('hidden');obStep=0;obDraft={name:state.profile.name,age:state.profile.age,goal:state.profile.goal,units:state.profile.units};drawOnboard()}
+function drawOnboard(){const body=document.getElementById('onboardBody');document.querySelectorAll('.stepdots i').forEach((d,i)=>d.classList.toggle('on',i<=obStep));document.getElementById('obBack').style.visibility=obStep===0?'hidden':'visible';document.getElementById('obNext').textContent=obStep===3?'Enter VYRO →':'Continue →';if(obStep===0)body.innerHTML=`<div class="eyebrow">A PERSONAL SPACE, JUST FOR YOU</div><h1 class="onboard-title">Your life.<br><span style="color:var(--purple)">In sync.</span></h1><p class="onboard-copy">A more considered way to build routines, care for wellbeing, move with intention and notice your progress.</p><div class="pill">✦ ROUTINE · WELLNESS · FITNESS</div>`;if(obStep===1)body.innerHTML=`<div class="eyebrow">STEP 01 · MAKE IT YOURS</div><h1 class="onboard-title">First, let's meet.</h1><p class="onboard-copy">A name makes your space personal. Age is optional.</p>${field('What should we call you?','obName','text',obDraft.name,'Your name')}${field('Age (optional)','obAge','number',obDraft.age,'Your age')}`;if(obStep===2)body.innerHTML=`<div class="eyebrow">STEP 02 · YOUR INTENTION</div><h1 class="onboard-title">What matters to you?</h1><div class="field"><label>Your main intention</label><select id="obGoal">${['Feel healthier and more consistent','Build strength and fitness','Improve sleep and recovery','Create a calmer daily routine','Improve focus and productivity','Build balanced habits'].map(g=>`<option ${obDraft.goal===g?'selected':''}>${g}</option>`).join('')}</select></div><div class="field"><label>Measurement units</label><select id="obUnits"><option ${obDraft.units==='Metric'?'selected':''}>Metric</option><option ${obDraft.units==='Imperial'?'selected':''}>Imperial</option></select></div>`;if(obStep===3)body.innerHTML=`<div class="eyebrow">STEP 03 · A QUICK NOTE</div><h1 class="onboard-title">Your space, your pace.</h1><p class="onboard-copy">Log what matters, see your patterns, and build habits at your own pace.</p><div class="notice"><b>Privacy first:</b> your entries stay in this browser's local storage. This prototype does not connect to wearables, sync to the cloud or provide medical advice.</div>`}
+function nextOnboard(){if(obStep===1){obDraft.name=document.getElementById('obName').value.trim();obDraft.age=document.getElementById('obAge').value;if(!obDraft.name)return notify('Add your name to continue.');if(obDraft.age&&(Number(obDraft.age)<13||Number(obDraft.age)>120))return notify('Enter an age from 13 to 120, or leave it blank.')}if(obStep===2){obDraft.goal=document.getElementById('obGoal').value;obDraft.units=document.getElementById('obUnits').value}if(obStep<3){obStep++;drawOnboard();return}state.profile=Object.assign(state.profile,obDraft,{onboarded:true});save();document.getElementById('onboarding').classList.add('hidden');document.getElementById('app').classList.remove('hidden');render();notify('Welcome to VYRO. Your space is ready.')}
+function certificate(id){const el=document.createElement('div');el.className='modal-backdrop';el.id='modal';el.innerHTML=`<div class="modal"><div class="modalhead"><h2>VYRO achievement</h2><button class="modalclose" id="modalClose">Close ×</button></div><div class="cert-preview"><div class="eyebrow">VYRO · PERSONAL MILESTONE</div><div class="cert-seal">✦</div><h2>${esc(id.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase()))}</h2><p class="sub">Awarded to ${esc(state.profile.name||'VYRO member')}</p><p class="small">${today()}</p></div><button class="btn" style="margin-top:15px" data-action="print">Print / Save as PDF</button></div>`;document.body.appendChild(el);el.addEventListener('click',e=>{if(e.target===el||e.target.id==='modalClose')el.remove()})}
+function handleProfilePhoto(file){if(!file.type.startsWith('image/'))return notify('Choose an image file.');if(file.size>8*1024*1024)return notify('Choose an image smaller than 8 MB.');const reader=new FileReader();reader.onload=()=>{const img=new Image();img.onload=()=>{const scale=Math.min(1,500/Math.max(img.width,img.height)),canvas=document.createElement('canvas');canvas.width=Math.round(img.width*scale);canvas.height=Math.round(img.height*scale);canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);state.profile.photo=canvas.toDataURL('image/jpeg',.82);save();render();notify('Profile photo saved on this device.')};img.onerror=()=>notify('Could not open that image.');img.src=reader.result};reader.onerror=()=>notify('Could not read that photo.');reader.readAsDataURL(file)}
+function submitForm(id,fn){const el=document.getElementById(id);if(el)el.addEventListener('submit',e=>{e.preventDefault();fn();save();render();notify('Changes saved.')})}
+submitForm('healthForm',()=>{state.water=Math.max(0,Number(document.getElementById('water').value)||0);state.waterGoal=Math.max(1,Number(document.getElementById('waterGoal').value)||8);state.sleepHours=Math.max(0,Math.min(24,Number(document.getElementById('sleepHours').value)||0));state.sleepQuality=document.getElementById('sleepQuality').value;state.energy=Number(document.getElementById('energy').value)||3;state.mood=document.getElementById('healthMood').value;snapshotHistory()});
+submitForm('movementForm',()=>{state.steps=Math.max(0,Number(document.getElementById('steps').value)||0);state.stepGoal=Math.max(1,Number(document.getElementById('stepGoal').value)||8000);state.weight=document.getElementById('weight').value;snapshotHistory()});
+submitForm('wellnessNoteForm',()=>{state.notes=document.getElementById('wellnessNote').value});
+submitForm('workoutGoalForm',()=>{state.workoutGoal=Math.max(1,Number(document.getElementById('workoutGoal').value)||3)});
+submitForm('nutritionGoalForm',()=>{state.caloriesGoal=Math.max(1,Number(document.getElementById('caloriesGoal').value)||2000);state.proteinGoal=Math.max(1,Number(document.getElementById('proteinGoal').value)||100)});
+submitForm('profileForm',()=>{state.profile.name=document.getElementById('profileName').value.trim()||state.profile.name;state.profile.age=document.getElementById('profileAge').value;state.profile.goal=document.getElementById('profileGoal').value;state.profile.units=document.getElementById('profileUnits').value});
+document.addEventListener('click',e=>{const focusPreset=e.target.closest('[data-focus-minutes]');if(focusPreset){state.focus.duration=Number(focusPreset.dataset.focusMinutes);state.focus.remaining=state.focus.duration*60;state.focus.running=false;clearInterval(focusInterval);focusInterval=null;render();return}const prompt=e.target.closest('[data-journal-prompt]');if(prompt){const b=document.getElementById('journalBody');if(b){b.value=(b.value?b.value+'\n\n':'')+prompt.dataset.journalPrompt;b.focus()}return}const cert=e.target.closest('[data-certificate]');if(cert){certificate(cert.dataset.certificate);return}const plan=e.target.closest('[data-plan-select]');if(plan){const p=plan.dataset.planSelect;if(p!=='free'&&!confirm('Preview '+p.toUpperCase()+' tier? This is a visual preview only; no payment will be created.'))return;state.membership={plan:p,status:'preview'};render();notify('Membership preview updated. Billing is not connected.');return}const nav=e.target.closest('[data-page]');if(nav){go(nav.dataset.page);return}const g=e.target.closest('[data-goto]');if(g){go(g.dataset.goto);return}const modal=e.target.closest('[data-modal]');if(modal){openModal(modal.dataset.modal);return}const act=e.target.closest('[data-action]');if(act){if(act.dataset.action==='print'){window.print();return}action(act.dataset.action);return}const mood=e.target.closest('[data-mood]');if(mood){state.mood=mood.dataset.mood;snapshotHistory();render();notify('Mood check-in saved.');return}const del=e.target.closest('[data-delete]');if(del){deleteItem(del.dataset.delete,Number(del.dataset.index));return}const pre=e.target.closest('[data-prefill-workout]');if(pre){openModal('workout',pre.dataset.prefillWorkout);return}if(e.target.id==='exportBtn'||e.target.id==='exportBtn2'){exportData();return}if(e.target.id==='importBtn2'){document.getElementById('importFile').click();return}if(e.target.id==='resetBtn'||e.target.id==='resetBtn2'){reset();return}if(e.target.id==='themeBtn'){action('theme');return}if(e.target.closest('#avatar')){go('settings');return}});
+document.addEventListener('change',e=>{const cb=e.target.closest('[data-routine-check]');if(cb){const i=Number(cb.dataset.routineCheck);if(state.routine[i])state.routine[i].done=cb.checked;snapshotHistory();render();notify(cb.checked?'Ritual completed.':'Ritual unchecked.');return}if(e.target.id==='importFile'&&e.target.files[0]){importData(e.target.files[0]);e.target.value=''}if(e.target.id==='profilePhotoInput'&&e.target.files[0]){handleProfilePhoto(e.target.files[0]);e.target.value=''}});
+document.addEventListener('input',e=>{if(e.target.matches('[data-journal-search]')){const q=e.target.value.toLowerCase().trim();document.querySelectorAll('[data-journal-entry]').forEach(el=>el.style.display=!q||el.dataset.search.includes(q)?'':'none')}});
+document.getElementById('obNext').addEventListener('click',nextOnboard);
+document.getElementById('obBack').addEventListener('click',()=>{if(obStep>0){if(obStep===2){obDraft.goal=document.getElementById('obGoal').value;obDraft.units=document.getElementById('obUnits').value}obStep--;drawOnboard()}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.getElementById('modal')?.remove()});
+document.getElementById('exportBtn').addEventListener('click',exportData);
+document.getElementById('resetBtn').addEventListener('click',reset);
+if(state.profile.onboarded){document.getElementById('app').classList.remove('hidden');render()}else showOnboarding();
+})();
+</script>
+</body>
+</html>
